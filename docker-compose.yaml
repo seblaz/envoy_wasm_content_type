@@ -23,7 +23,7 @@ services:
       - "5000:3000"
 
   envoy:
-    image: envoyproxy/envoy:v1.19-latest
+    image: envoyproxy/envoy:v1.20.0
     entrypoint: "bash -c"
     command: "'while [ ! -f /etc/envoy/target/wasm32-unknown-unknown/release/response_status.wasm ]; do sleep 1; done && envoy -c /etc/envoy/envoy.yaml --component-log-level wasm:debug'"
     volumes:
