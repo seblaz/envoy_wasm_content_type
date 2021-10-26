@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  rust:
+    image: rust:1.54.0-buster
+    working_dir: /opt/app
+    volumes:
+      - ./wasm_filter:/opt/app
+    tty: true
+    command: "./compile.sh"
+
+  blue:
+    image: gcr.io/tetratelabs/color-app:1.0.0
+    environment:
+      BG_COLOR: "blue"
+    ports:
+     - "5050:3000"
+
+  green:
+    image: gcr.io/tetratelabs/color-app:1.0.0
+    environment:
+      BG_COLOR: "green"
+    ports:
+      - "5000:3000"
+
+  envoy:
+    image: envoyproxy/envoy:v1.19-latest
+    entrypoint: "bash -c"
+    command: "'while [ ! -f /etc/envoy/target/wasm32-unknown-unknown/release/response_status.wasm ]; do sleep 1; done && envoy -c /etc/envoy/envoy.yaml --component-log-level wasm:debug'"
+    volumes:
+      - ./envoy_example/config.yaml:/etc/envoy/envoy.yaml
+      - ./wasm_filter/target:/etc/envoy/target
+    ports:
+      - "10000:10000"
+      - "9901:9901"
