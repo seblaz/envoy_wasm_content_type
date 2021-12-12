@@ -1,5 +1,5 @@
 [package]
-name = "response_status"
+name = "content_type"
 version = "0.1.0"
 edition = "2018"
 
@@ -11,7 +11,7 @@ proxy-wasm = "0.1.4"
 
 [lib]
 crate-type = ["cdylib"]
-name="response_status"
+name="content_type"
 path= "src/lib.rs"
 
 [profile.release]
